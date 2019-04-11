@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent=new Intent(MainActivity.this,SignInLayout.class);
         startActivity(intent);
+        drawerLayout.closeDrawer(Gravity.RIGHT);
     }
     public  void  GoToLogIn()
     {

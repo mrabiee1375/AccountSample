@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LogInLayout">
+    tools:context=".ActivationCodeLayout">
 
     <include layout="@layout/sec_toolbar" />
 
@@ -23,6 +23,7 @@
             android:layout_marginRight="40dp">
 
             <EditText
+                android:id="@+id/activation_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_shape"
@@ -30,6 +31,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:onClick="ActivateClick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
