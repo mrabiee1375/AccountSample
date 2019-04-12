@@ -11,6 +11,7 @@ import com.example.accountsample.Api.RetrofitClient;
 import com.example.accountsample.Models.ResponseModel;
 import com.example.accountsample.Models.SignInModel;
 import com.example.accountsample.Models.StaticVars;
+import com.example.accountsample.Utilities.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,12 +40,12 @@ public class SignInLayout extends AppCompatActivity {
         confPassword = (EditText) findViewById(R.id.signIn_confPass);
 
 
-        fName.setText("محمد");
-        lName.setText("ربیعی");
-        nationalCode.setText("0019139136");
-        phoneNumber.setText("09128003185");
-        password.setText("123456");
-        confPassword.setText("123456");
+        //fName.setText("محمد");
+        //lName.setText("ربیعی");
+        //nationalCode.setText("0019139136");
+        //phoneNumber.setText("09128003185");
+        //password.setText("123456");
+        //confPassword.setText("123456");
 
     }
 
@@ -69,6 +70,10 @@ public class SignInLayout extends AppCompatActivity {
                     intent.putExtra("userId",response.body().getData());
                     startActivity(intent);
                     finish();
+                }
+                else
+                {
+                    Utility.oprnCustomToast(response.body().getDetailMessages(),SignInLayout.this);
                 }
             }
             @Override

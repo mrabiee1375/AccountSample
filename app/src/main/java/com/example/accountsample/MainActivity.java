@@ -1,17 +1,35 @@
 package com.example.accountsample;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.accountsample.Models.UserModel;
+import com.example.accountsample.Utilities.Utility;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
 
     ImageView menu_icon;
     DrawerLayout drawerLayout;
@@ -21,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_layout);
+
+
         menu_icon = (ImageView) findViewById(R.id.open_menu);
         drawerLayout = (DrawerLayout) findViewById(R.id.menu_drawer);
         navigationView = (NavigationView) findViewById(R.id.menu_navigation);
@@ -34,24 +54,36 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId())
-                {
+                switch (menuItem.getItemId()) {
                     case R.id.signIn_mItem:
                         GoToSignIn();
-                        break;
-                    case R.id.activationCode_mItem:
-                        GoToActivatinLayout();
                         break;
                     case R.id.logIn_mItem:
                         GoToLogIn();
                         break;
                     case R.id.signOut_mItem:
+                        LogOut();
                         break;
 
                 }
                 return false;
             }
         });
+
+
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetailsShEditor", MODE_PRIVATE);
+        String userDetailJson = sharedPreferences.getString("userDetails", "");
+
+        if (!userDetailJson.isEmpty()) {
+            Gson gson = new Gson();
+            UserModel userModel = gson.fromJson(userDetailJson, UserModel.class);
+            TextView fullNameTtextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.fullName_textView);
+            String fullName = userModel.getFirstName() + " " + userModel.getLastName();
+            fullNameTtextView.setText(fullName);
+        } else {
+            MenuItem logout_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.signOut_mItem);
+            logout_mItem.setVisible(false);
+        }
 
     }
 
@@ -64,21 +96,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public  void  GoToSignIn()
-    {
-        Intent intent=new Intent(MainActivity.this,SignInLayout.class);
+    public void GoToSignIn() {
+        Intent intent = new Intent(MainActivity.this, SignInLayout.class);
         startActivity(intent);
         drawerLayout.closeDrawer(Gravity.RIGHT);
     }
-    public  void  GoToLogIn()
-    {
-        Intent intent=new Intent(MainActivity.this,LogInLayout.class);
+
+    public void GoToLogIn() {
+        Intent intent = new Intent(MainActivity.this, LogInLayout.class);
         startActivity(intent);
     }
-    public  void  GoToActivatinLayout()
-    {
-        Intent intent=new Intent(MainActivity.this,ActivationCodeLayout.class);
+
+    public void GoToActivatinLayout() {
+        Intent intent = new Intent(MainActivity.this, ActivationCodeLayout.class);
         startActivity(intent);
+    }
+
+    public void LogOut() {
+
+        SharedPreferences.Editor sharedEditor = getSharedPreferences("userDetailsShEditor", MODE_PRIVATE).edit();
+        sharedEditor.remove("userDetails");
+        TextView fullNameTtextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.fullName_textView);
+        fullNameTtextView.setText("");
+
+        MenuItem logout_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.signOut_mItem);
+        logout_mItem.setVisible(false);
     }
 
 

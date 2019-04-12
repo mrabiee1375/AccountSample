@@ -1,5 +1,6 @@
 package com.example.accountsample;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +11,9 @@ import com.example.accountsample.Api.RetrofitClient;
 import com.example.accountsample.Models.ActivationAccountModel;
 import com.example.accountsample.Models.ResponseModel;
 import com.example.accountsample.Models.StaticVars;
+import com.example.accountsample.Utilities.Utility;
 
+import okhttp3.internal.Util;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +44,15 @@ public class ActivationCodeLayout extends AppCompatActivity {
         _ApiService.ActivationAccount(model).enqueue(new Callback<ResponseModel<Boolean>>() {
             @Override
             public void onResponse(Call<ResponseModel<Boolean>> call, Response<ResponseModel<Boolean>> response) {
-                finish();
+                if(response.body().getIsSuccess()) {
+                    Intent intent = new Intent(ActivationCodeLayout.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else
+                {
+                        Utility.oprnCustomToast(response.body().getDetailMessages(),ActivationCodeLayout.this);
+                }
             }
 
             @Override
