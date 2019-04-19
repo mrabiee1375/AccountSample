@@ -3,9 +3,11 @@ package com.example.accountsample.Utilities;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.example.accountsample.R;
 
@@ -29,5 +31,14 @@ public class Utility {
                 dialog.dismiss();
             }
         });
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height=list.size()*100;
+        if(list.size()*100>500)
+        {
+            params.height=500;
+        }
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

@@ -80,11 +80,19 @@ public class MainActivity extends AppCompatActivity {
             TextView fullNameTtextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.fullName_textView);
             String fullName = userModel.getFirstName() + " " + userModel.getLastName();
             fullNameTtextView.setText(fullName);
+            MenuItem signIn_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.signIn_mItem);
+            MenuItem logIn_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.logIn_mItem);
+            logIn_mItem.setVisible(false);
+            signIn_mItem.setTitle("مشاهده مشخصات");
         } else {
             MenuItem logout_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.signOut_mItem);
             logout_mItem.setVisible(false);
+
         }
 
+        //List<String> a=new ArrayList<String>();
+        //a.add("A");
+        //Utility.oprnCustomToast(a,MainActivity.this);
     }
 
     @Override
@@ -116,11 +124,17 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences.Editor sharedEditor = getSharedPreferences("userDetailsShEditor", MODE_PRIVATE).edit();
         sharedEditor.remove("userDetails");
+        sharedEditor.commit();
         TextView fullNameTtextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.fullName_textView);
         fullNameTtextView.setText("");
 
         MenuItem logout_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.signOut_mItem);
         logout_mItem.setVisible(false);
+
+        MenuItem signIn_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.signIn_mItem);
+        MenuItem logIn_mItem = (MenuItem) navigationView.getMenu().findItem(R.id.logIn_mItem);
+        logIn_mItem.setVisible(true);
+        signIn_mItem.setTitle("عضویت");
     }
 
 

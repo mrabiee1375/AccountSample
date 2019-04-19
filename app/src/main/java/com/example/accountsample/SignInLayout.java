@@ -1,9 +1,11 @@
 package com.example.accountsample;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.accountsample.Api.ApiService;
@@ -11,7 +13,9 @@ import com.example.accountsample.Api.RetrofitClient;
 import com.example.accountsample.Models.ResponseModel;
 import com.example.accountsample.Models.SignInModel;
 import com.example.accountsample.Models.StaticVars;
+import com.example.accountsample.Models.UserModel;
 import com.example.accountsample.Utilities.Utility;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,12 +44,29 @@ public class SignInLayout extends AppCompatActivity {
         confPassword = (EditText) findViewById(R.id.signIn_confPass);
 
 
-        //fName.setText("محمد");
-        //lName.setText("ربیعی");
-        //nationalCode.setText("0019139136");
-        //phoneNumber.setText("09128003185");
-        //password.setText("123456");
-        //confPassword.setText("123456");
+        SharedPreferences sharedPreferences = getSharedPreferences("userDetailsShEditor", MODE_PRIVATE);
+        String userDetailJson = sharedPreferences.getString("userDetails", "");
+
+        if (!userDetailJson.isEmpty()) {
+            Gson gson = new Gson();
+            UserModel userModel = gson.fromJson(userDetailJson, UserModel.class);
+            fName.setText(userModel.getFirstName());
+            lName.setText(userModel.getLastName());
+            nationalCode.setText(userModel.getNationalcode());
+            phoneNumber.setText(userModel.getPhoneNumber());
+
+            fName.setEnabled(false);
+            lName.setEnabled(false);
+            nationalCode.setEnabled(false);
+            phoneNumber.setEnabled(false);
+
+            Button signIn=(Button)findViewById(R.id.signIn_btn);
+            signIn.setVisibility(View.GONE);
+            password.setVisibility(View.GONE);
+            confPassword.setVisibility(View.GONE);
+        }
+
+
 
     }
 
@@ -81,9 +102,8 @@ public class SignInLayout extends AppCompatActivity {
                 int x=9;
             }
         });
-
-
-
     }
+
+
 
 }
