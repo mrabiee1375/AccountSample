@@ -47,7 +47,10 @@ public class ActivationCodeLayout extends AppCompatActivity {
 
         userId=getIntent().getExtras().getString("userId");
 
-
+        String action = "START";
+        final Intent intent = new Intent(this, SmsReciver.class);
+        intent.setAction(action);
+        startService(intent);
        SmsReciver.bindListener(new SmsListener() {
            @Override
            public void onMessageReceived(String messageText) {
@@ -62,7 +65,10 @@ public class ActivationCodeLayout extends AppCompatActivity {
 
            }
        });
-        requestPermission();
+
+       if(!checkPermission()) {
+           requestPermissionReciveSms();
+       }
     }
 
     public void ActivateClick(View view) {
@@ -97,9 +103,9 @@ public class ActivationCodeLayout extends AppCompatActivity {
         });
     }
 
-    private void requestPermission(){
+    private void requestPermissionReciveSms(){
         ActivityCompat.requestPermissions(ActivationCodeLayout.this,new String[]{
-                Manifest.permission.SEND_SMS},PERMISSION_REQUEST_CODE);
+                Manifest.permission.RECEIVE_SMS},PERMISSION_REQUEST_CODE);
     }
     private boolean checkPermission(){
         int result = ContextCompat.checkSelfPermission(ActivationCodeLayout.this,
